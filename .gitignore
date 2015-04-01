@@ -3,6 +3,12 @@
 conf/portal-db.conf
 conf/portaldb.properties
 
+# Play application
+logs
+project/project
+project/target
+target
+tmp
 # sbt specific
 .cache/
 .history/
@@ -69,3 +75,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/bin/
