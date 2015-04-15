@@ -7,15 +7,22 @@
         
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/css/bootstrap.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/css/main.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.5/media/css/jquery.dataTables.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.5/extensions/ColReorder/css/dataTables.colReorder.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.5/extensions/ColVis/css/dataTables.colVis.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.6/media/css/jquery.dataTables.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.6/extensions/ColReorder/css/dataTables.colReorder.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("DataTables-1.10.6/extensions/ColVis/css/dataTables.colVis.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <style>
+        	tfoot input {
+		        width: 100%;
+		        padding: 3px;
+		        box-sizing: border-box;
+		    }
+        </style>
         <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("DataTables-1.10.5/media/js/jquery.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("DataTables-1.10.5/media/js/jquery.dataTables.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("DataTables-1.10.5/extensions/ColVis/js/dataTables.colVis.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("DataTables-1.10.5/extensions/ColReorder/js/dataTables.colReorder.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("DataTables-1.10.6/media/js/jquery.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("DataTables-1.10.6/media/js/jquery.dataTables.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("DataTables-1.10.6/extensions/ColVis/js/dataTables.colVis.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("DataTables-1.10.6/extensions/ColReorder/js/dataTables.colReorder.js")" type="text/javascript"></script>
     </head>
     <body>
     	
@@ -23,7 +30,12 @@
 			<div class="container">
 			    <script>
 				    $(document).ready(function() {
-				         			$('#example').DataTable( {
+				    	$('#example tfoot th').each( function () {
+				            var title = $('#example thead th').eq( $(this).index() ).text();
+				            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+				        } );
+				        
+		         		var table = $('#example').DataTable( {
 							        	"columns": [
 							        	            { "data": "id" },
 							        	            { "data": "name" },
@@ -52,6 +64,17 @@
 							            	    });
 							            },
 							        });
+
+		         	// Apply the search
+		         	    table.columns().every( function() {
+		         	        var that = this;
+		         	 
+		         	        $( 'input', this.footer() ).on( 'keyup change', function () {
+		         	            that
+		         	                .search( this.value )
+		         	                .draw();
+		         	        } );
+		         	    } );
 				         			
 				       
 				    } );
@@ -65,6 +88,13 @@
 			                
 			            </tr>
         			</thead>
+        			<tfoot>
+            		  <tr>
+                        <th>Id</th>
+			            <th>Name</th>
+			            <th>Birthday</th>
+                      </tr>
+                    </tfoot>
 				</table>
 				
         	</div>
